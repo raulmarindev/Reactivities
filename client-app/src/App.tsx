@@ -1,24 +1,35 @@
 import './App.css';
-import logo from './logo.svg';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Header, Icon, List } from 'semantic-ui-react';
+import wretch from 'wretch';
 
-const App = () => {
+interface IValue {
+  id: number;
+  name: string;
+}
+
+const App: React.FC = () => {
+  const [values, setValues] = useState([] as IValue[]);
+
+  useEffect(() => {
+    wretch('http://localhost:5000/api/values')
+      .get()
+      .json((json: any) => {
+        setValues(json as IValue[]);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header as='h2'>
+        <Icon name='users' />
+        <Header.Content>Reactivities</Header.Content>
+      </Header>
+      <List>
+        {values.map(value => (
+          <List.Item key={value.id}>{value.name}</List.Item>
+        ))}
+      </List>
     </div>
   );
 };
