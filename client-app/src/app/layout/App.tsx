@@ -1,21 +1,17 @@
 import './App.css';
+import { IActivity } from '../models/IActivity';
 import React, { useEffect, useState } from 'react';
 import { Header, Icon, List } from 'semantic-ui-react';
 import wretch from 'wretch';
 
-interface IValue {
-  id: number;
-  name: string;
-}
-
 const App: React.FC = () => {
-  const [values, setValues] = useState([] as IValue[]);
+  const [activities, setActivities] = useState([] as IActivity[]);
 
   useEffect(() => {
-    wretch('http://localhost:5000/api/values')
+    wretch('http://localhost:5000/api/activities')
       .get()
       .json((json: any) => {
-        setValues(json as IValue[]);
+        setActivities(json as IActivity[]);
       });
   }, []);
 
@@ -26,8 +22,8 @@ const App: React.FC = () => {
         <Header.Content>Reactivities</Header.Content>
       </Header>
       <List>
-        {values.map(value => (
-          <List.Item key={value.id}>{value.name}</List.Item>
+        {activities.map(activity => (
+          <List.Item key={activity.id}>{activity.title}</List.Item>
         ))}
       </List>
     </div>
