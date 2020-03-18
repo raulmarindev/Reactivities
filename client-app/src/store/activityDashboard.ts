@@ -9,22 +9,24 @@ import {
 // Types
 export interface ActivityDashboardState {
     activities: IActivity[];
-    isFetching: boolean;
-    selectedActivity: IActivity | undefined;
     editMode: boolean;
+    isFetching: boolean;
+    isSubmitting: boolean;
+    selectedActivity: IActivity | undefined;
 };
 
 const initialState: ActivityDashboardState = {
     activities: [],
+    editMode: false,
     isFetching: false,
-    selectedActivity: undefined,
-    editMode: false
+    isSubmitting: false,
+    selectedActivity: undefined
 };
 
 // Action Creators
-export const requestActivities = createAction('REQUEST_ACTIVITIES');
-export const receiveActivities = createAction<IActivity[]>('RECEIVE_ACTIVITIES');
-export const requestActivitiesError = createAction('REQUEST_ACTIVITIES_ERROR');
+const requestActivities = createAction('REQUEST_ACTIVITIES');
+const receiveActivities = createAction<IActivity[]>('RECEIVE_ACTIVITIES');
+const requestActivitiesError = createAction('REQUEST_ACTIVITIES_ERROR');
 export const selectActivity = createAction('SELECT_ACTIVITY', (activityId: string) => {
     return {
         payload: {
@@ -33,8 +35,9 @@ export const selectActivity = createAction('SELECT_ACTIVITY', (activityId: strin
     };
 });
 export const openCreateForm = createAction('OPEN_CREATE_FORM');
-export const startCreateActivity = createAction('START_CREATE_ACTIVITY');
-export const endCreateActivity = createAction('END_CREATE_ACTIVITY');
+const startCreateActivity = createAction('START_CREATE_ACTIVITY');
+const endCreateActivity = createAction('END_CREATE_ACTIVITY');
+const createActivityError = createAction('CREATE_ACTIVITY_ERROR');
 
 // Reducer
 export const reducer = createReducer(initialState, builder =>
@@ -71,6 +74,24 @@ export const reducer = createReducer(initialState, builder =>
                 editMode: true
             };
         })
+        .addCase(startCreateActivity, state => {
+            return {
+                ...state,
+                isSubmitting: true
+            };
+        })
+        .addCase(endCreateActivity, state => {
+            return {
+                ...state,
+                isSubmitting: false
+            };
+        })
+        .addCase(createActivityError, state => {
+            return {
+                ...state,
+                isSubmitting: false
+            };
+        })
 );
 
 // side effects, only as applicable
@@ -98,5 +119,17 @@ export const fetchActivities = () => async (dispatch: Dispatch) => {
     } catch (error) {
         console.log(error);
         dispatch(requestActivitiesError());
+    }
+};
+
+export const createActivity = (activity: IActivity) => async (dispatch: Dispatch) => {
+    dispatch(startCreateActivity());
+
+    try {
+        await agent.Activities.create(activity);
+        dispatch(endCreateActivity());
+    } catch (error) {
+        console.log(error);
+        dispatch(createActivityError());
     }
 };

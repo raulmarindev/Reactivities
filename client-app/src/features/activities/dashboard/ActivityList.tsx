@@ -12,11 +12,10 @@ import {
 interface IProps {
     deleteActivity: (id: string) => void;
     selectActivity: (id: string) => void;
-    submitting: boolean;
 }
 
-export const ActivityList: React.FC<IProps> = ({ deleteActivity, selectActivity, submitting }) => {
-    const { activities, selectedActivity } = useSelector<RootState, ActivityDashboardState>(({ activityDashboardReducer }) => activityDashboardReducer);
+export const ActivityList: React.FC<IProps> = ({ deleteActivity, selectActivity }) => {
+    const { activities, isSubmitting, selectedActivity } = useSelector<RootState, ActivityDashboardState>(({ activityDashboardReducer }) => activityDashboardReducer);
 
     return (
         <Segment clearing>
@@ -32,7 +31,7 @@ export const ActivityList: React.FC<IProps> = ({ deleteActivity, selectActivity,
                             </Item.Description>
                             <Item.Extra>
                                 <Button floated='right' content='View' color='blue' onClick={() => { selectActivity(activity.id); }} />
-                                <Button floated='right' content='Delete' color='red' onClick={() => { deleteActivity(activity.id); }} loading={submitting && activity.id === selectedActivity?.id} />
+                                <Button floated='right' content='Delete' color='red' onClick={() => { deleteActivity(activity.id); }} loading={isSubmitting && activity.id === selectedActivity?.id} />
                                 <Label basic content='category' />
                             </Item.Extra>
                         </Item.Content>

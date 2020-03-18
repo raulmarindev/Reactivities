@@ -3,7 +3,12 @@ import { LoadingComponent } from './LoadingComponent';
 import { ActivityDashboard } from '../../features/activities/dashboard/ActivityDashboard';
 import { NavBar } from '../../features/nav/NavBar';
 import { RootState } from '../../store';
-import { fetchActivities, openCreateForm, selectActivity } from '../../store/activityDashboard';
+import {
+  createActivity,
+  fetchActivities,
+  openCreateForm,
+  selectActivity
+  } from '../../store/activityDashboard';
 import agent from '../api/agent';
 import { IActivity } from '../models/IActivity';
 import React, { useEffect, useState } from 'react';
@@ -35,12 +40,7 @@ const App: React.FC = () => {
   };
 
   const handleCreateActivity = (activity: IActivity) => {
-    setSubmitting(true);
-    agent.Activities.create(activity).then(() => {
-      setActivities([...activities, activity]);
-      setSelectedActivity(activity);
-      setEditMode(false);
-    }).then(() => setSubmitting(false));
+    dispatch(createActivity(activity));
   };
 
   const handleDeleteActivity = (activityId: string) => {
@@ -72,8 +72,7 @@ const App: React.FC = () => {
           deleteActivity={handleDeleteActivity}
           editActivity={handleEditActivity}
           setEditMode={setEditMode}
-          selectActivity={handleSelectActivity}
-          submitting={submitting} />
+          selectActivity={handleSelectActivity} />
       </Container>
     </>
   );

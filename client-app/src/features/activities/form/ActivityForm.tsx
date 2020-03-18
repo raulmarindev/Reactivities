@@ -1,5 +1,8 @@
 import { IActivity } from '../../../app/models/IActivity';
+import { RootState } from '../../../store';
+import { ActivityDashboardState } from '../../../store/activityDashboard';
 import React, { FormEvent, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Button, Form, Segment } from 'semantic-ui-react';
 import { v4 as uuid } from 'uuid';
 
@@ -8,10 +11,10 @@ interface IProps {
     createActivity: (activity: IActivity) => void;
     editActivity: (activity: IActivity) => void;
     setEditMode: (active: boolean) => void;
-    submitting: boolean;
 }
 
-export const ActivityForm: React.FC<IProps> = ({ activity: initialActivity, createActivity, editActivity, setEditMode, submitting }) => {
+export const ActivityForm: React.FC<IProps> = ({ activity: initialActivity, createActivity, editActivity, setEditMode }) => {
+    const { isSubmitting } = useSelector<RootState, ActivityDashboardState>(({ activityDashboardReducer }) => activityDashboardReducer);
     const initializeForm = () => {
         if (initialActivity) {
             return initialActivity;
@@ -58,7 +61,7 @@ export const ActivityForm: React.FC<IProps> = ({ activity: initialActivity, crea
                 <Form.Input name='date' value={activity.date} placeholder='Date' type='datetime-local' onChange={handleInputChange} />
                 <Form.Input name='city' value={activity.city} placeholder='City' onChange={handleInputChange} />
                 <Form.Input name='venue' value={activity.venue} placeholder='Venue' onChange={handleInputChange} />
-                <Button floated="right" positive type="submit" content="Submit" loading={submitting} />
+                <Button floated="right" positive type="submit" content="Submit" loading={isSubmitting} />
                 <Button floated="right" type="button" content="Cancel" onClick={() => { setEditMode(false); }} />
             </Form>
         </Segment>
