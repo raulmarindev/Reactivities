@@ -1,5 +1,5 @@
-import agent from '../app/api/agent';
-import { IActivity } from '../app/models/IActivity';
+import agent from 'app/api/agent';
+import { IActivity } from 'app/models/IActivity';
 import { createAction, createReducer, Dispatch, } from '@reduxjs/toolkit';
 
 // Types

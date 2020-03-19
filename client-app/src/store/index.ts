@@ -1,8 +1,8 @@
-import { reducer as activityDashboardReducer } from './activityDashboard';
 import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
 import { createLogger } from 'redux-logger';
 import thunkMiddleware, { ThunkAction } from 'redux-thunk';
+import { reducer as activityDashboardReducer } from 'store/activityDashboard';
 import {
     Action,
 } from 'redux';

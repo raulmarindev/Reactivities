@@ -1,5 +1,3 @@
-import { RootState } from '../../../store';
-import { ActivityDashboardState, getActivitiesByDate } from '../../../store/activityDashboard';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -8,6 +6,8 @@ import {
     Label,
     Segment
     } from 'semantic-ui-react';
+import { RootState } from 'store';
+import { ActivityDashboardState, getActivitiesByDate } from 'store/activityDashboard';
 
 interface IProps {
     deleteActivity: (id: string) => void;

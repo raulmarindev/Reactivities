@@ -1,11 +1,11 @@
-import { IActivity } from '../../../app/models/IActivity';
-import { RootState } from '../../../store';
-import { ActivityDashboardState, setEditMode } from '../../../store/activityDashboard';
+import { IActivity } from 'app/models/IActivity';
 import React, { FormEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Button, Form, Segment } from 'semantic-ui-react';
+import { RootState } from 'store';
+import { ActivityDashboardState, setEditMode } from 'store/activityDashboard';
 import { v4 as uuid } from 'uuid';
 
 interface IProps {

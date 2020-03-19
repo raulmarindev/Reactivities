@@ -1,8 +1,14 @@
-import './App.css';
-import { LoadingComponent } from './LoadingComponent';
-import { ActivityDashboard } from '../../features/activities/dashboard/ActivityDashboard';
-import { NavBar } from '../../features/nav/NavBar';
-import { RootState } from '../../store';
+import 'app/layout/App.css';
+import { LoadingComponent } from 'app/layout/LoadingComponent';
+import { IActivity } from 'app/models/IActivity';
+import { ActivityDashboard } from 'features/activities/dashboard/ActivityDashboard';
+import { NavBar } from 'features/nav/NavBar';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { Container } from 'semantic-ui-react';
+import { RootState } from 'store';
 import {
   createActivity,
   deleteActivity,
@@ -10,13 +16,7 @@ import {
   openCreateForm,
   selectActivity,
   updateActivity
-  } from '../../store/activityDashboard';
-import { IActivity } from '../models/IActivity';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Action } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
-import { Container } from 'semantic-ui-react';
+  } from 'store/activityDashboard';
 
 const App: React.FC = () => {
   const loading = useSelector<RootState, boolean>(({ activityDashboardReducer }) => activityDashboardReducer.isFetching);

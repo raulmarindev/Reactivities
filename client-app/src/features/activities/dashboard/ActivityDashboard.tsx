@@ -1,12 +1,12 @@
-import { ActivityDetails } from './ActivityDetails';
-import { ActivityList } from './ActivityList';
-import { IActivity } from '../../../app/models/IActivity';
-import { RootState } from '../../../store';
-import { ActivityDashboardState } from '../../../store/activityDashboard';
-import { ActivityForm } from '../form/ActivityForm';
+import { IActivity } from 'app/models/IActivity';
+import { ActivityDetails } from 'features/activities/dashboard/ActivityDetails';
+import { ActivityList } from 'features/activities/dashboard/ActivityList';
+import { ActivityForm } from 'features/activities/form/ActivityForm';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Grid } from 'semantic-ui-react';
+import { RootState } from 'store';
+import { ActivityDashboardState } from 'store/activityDashboard';
 
 interface IProps {
     createActivity: (activity: IActivity) => void;
