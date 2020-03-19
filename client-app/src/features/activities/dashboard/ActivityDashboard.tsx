@@ -12,23 +12,21 @@ interface IProps {
     createActivity: (activity: IActivity) => void;
     deleteActivity: (id: string) => void;
     editActivity: (activity: IActivity) => void;
-    setEditMode: (active: boolean) => void;
     selectActivity: (id: string) => void;
 }
 
-export const ActivityDashboard: React.FC<IProps> = ({ createActivity, deleteActivity, editActivity, selectActivity, setEditMode }) => {
+export const ActivityDashboard: React.FC<IProps> = ({ createActivity, deleteActivity, editActivity, selectActivity }) => {
     const { editMode, selectedActivity } = useSelector<RootState, ActivityDashboardState>(({ activityDashboardReducer }) => activityDashboardReducer);
 
-    console.log(`editMode = ${editMode}`);
     return (
         <Grid>
             <Grid.Column width={10}>
                 <ActivityList deleteActivity={deleteActivity} selectActivity={selectActivity} />
             </Grid.Column>
             <Grid.Column width={6}>
-                {selectedActivity && !editMode && <ActivityDetails onCancel={() => { selectActivity(""); }} setEditMode={setEditMode} />}
+                {selectedActivity && !editMode && <ActivityDetails onCancel={() => { selectActivity(""); }} />}
                 {editMode && <ActivityForm key={selectedActivity?.id || 0} activity={selectedActivity!} createActivity={createActivity}
-                    editActivity={editActivity} setEditMode={setEditMode} />}
+                    editActivity={editActivity} />}
             </Grid.Column>
         </Grid>
     );

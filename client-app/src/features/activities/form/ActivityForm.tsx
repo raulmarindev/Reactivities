@@ -1,8 +1,10 @@
 import { IActivity } from '../../../app/models/IActivity';
 import { RootState } from '../../../store';
-import { ActivityDashboardState } from '../../../store/activityDashboard';
+import { ActivityDashboardState, setEditMode } from '../../../store/activityDashboard';
 import React, { FormEvent, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { Button, Form, Segment } from 'semantic-ui-react';
 import { v4 as uuid } from 'uuid';
 
@@ -10,11 +12,12 @@ interface IProps {
     activity: IActivity;
     createActivity: (activity: IActivity) => void;
     editActivity: (activity: IActivity) => void;
-    setEditMode: (active: boolean) => void;
 }
 
-export const ActivityForm: React.FC<IProps> = ({ activity: initialActivity, createActivity, editActivity, setEditMode }) => {
+export const ActivityForm: React.FC<IProps> = ({ activity: initialActivity, createActivity, editActivity }) => {
     const { isSubmitting } = useSelector<RootState, ActivityDashboardState>(({ activityDashboardReducer }) => activityDashboardReducer);
+    const dispatch = useDispatch<ThunkDispatch<RootState, unknown, Action>>();
+
     const initializeForm = () => {
         if (initialActivity) {
             return initialActivity;
@@ -62,7 +65,7 @@ export const ActivityForm: React.FC<IProps> = ({ activity: initialActivity, crea
                 <Form.Input name='city' value={activity.city} placeholder='City' onChange={handleInputChange} />
                 <Form.Input name='venue' value={activity.venue} placeholder='Venue' onChange={handleInputChange} />
                 <Button floated="right" positive type="submit" content="Submit" loading={isSubmitting} />
-                <Button floated="right" type="button" content="Cancel" onClick={() => { setEditMode(false); }} />
+                <Button floated="right" type="button" content="Cancel" onClick={() => { dispatch(setEditMode(false)); }} />
             </Form>
         </Segment>
     );
