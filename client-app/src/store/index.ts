@@ -1,7 +1,7 @@
 import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
 import { createLogger } from 'redux-logger';
-import thunkMiddleware, { ThunkAction } from 'redux-thunk';
+import thunkMiddleware, { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { reducer as activityDashboardReducer } from 'store/activityDashboard';
 import {
     Action,
@@ -29,4 +29,4 @@ export const store = configureStore({
     ] as const // prevent this from becoming just `Array<Middleware>`
 });
 
-export type AppDispatch = typeof store.dispatch;
+export type AppDispatch = ThunkDispatch<RootState, unknown, Action>;

@@ -1,62 +1,32 @@
 import 'app/layout/App.css';
 import { LoadingComponent } from 'app/layout/LoadingComponent';
-import { IActivity } from 'app/models/IActivity';
 import { ActivityDashboard } from 'features/activities/dashboard/ActivityDashboard';
+import { HomePage } from 'features/activities/home/HomePage';
 import { NavBar } from 'features/nav/NavBar';
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Action } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
+import { useDispatch } from 'react-redux';
+import { Route } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
-import { RootState } from 'store';
-import {
-  createActivity,
-  deleteActivity,
-  fetchActivities,
-  openCreateForm,
-  selectActivity,
-  updateActivity
-  } from 'store/activityDashboard';
+import { AppDispatch, useTypedSelector } from 'store';
+import { fetchActivities, } from 'store/activityDashboard';
 
 const App: React.FC = () => {
-  const loading = useSelector<RootState, boolean>(({ activityDashboardReducer }) => activityDashboardReducer.isFetching);
+  const loading = useTypedSelector<boolean>(({ activityDashboardReducer }) => activityDashboardReducer.isFetching);
 
-  const dispatch = useDispatch<ThunkDispatch<RootState, unknown, Action>>();
+  const dispatch = useDispatch<AppDispatch>();
+  
   useEffect(() => {
     dispatch(fetchActivities());
   }, [dispatch]);
-
-  const handleSelectActivity = (id: string) => {
-    dispatch(selectActivity(id));
-  };
-
-  const handleOpenCreateForm = () => {
-    dispatch(openCreateForm());
-  };
-
-  const handleCreateActivity = (activity: IActivity) => {
-    dispatch(createActivity(activity));
-  };
-
-  const handleDeleteActivity = (activityId: string) => {
-    dispatch(deleteActivity(activityId));
-  };
-
-  const handleEditActivity = (activity: IActivity) => {
-    dispatch(updateActivity(activity));
-  };
 
   if (loading) return (<LoadingComponent content="Loading activities..." />);
 
   return (
     <>
-      <NavBar openCreateForm={handleOpenCreateForm} />
+      <NavBar />
       <Container style={{ marginTop: '7em' }}>
-        <ActivityDashboard
-          createActivity={handleCreateActivity}
-          deleteActivity={handleDeleteActivity}
-          editActivity={handleEditActivity}
-          selectActivity={handleSelectActivity} />
+        <Route path="/" component={HomePage} />
+          <ActivityDashboard />
       </Container>
     </>
   );

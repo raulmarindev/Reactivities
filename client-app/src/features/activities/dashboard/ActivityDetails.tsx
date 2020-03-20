@@ -1,18 +1,13 @@
+import { IActivity } from 'app/models/IActivity';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Action } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
+import { useDispatch } from 'react-redux';
 import { Button, Card, Image } from 'semantic-ui-react';
-import { RootState } from 'store';
-import { ActivityDashboardState, setEditMode } from 'store/activityDashboard';
+import { AppDispatch, useTypedSelector } from 'store';
+import { selectActivity, setEditMode } from 'store/activityDashboard';
 
-interface IProps {
-    onCancel: () => void;
-}
-
-export const ActivityDetails: React.FC<IProps> = ({ onCancel }) => {
-    const { selectedActivity: activity } = useSelector<RootState, ActivityDashboardState>(({ activityDashboardReducer }) => activityDashboardReducer);
-    const dispatch = useDispatch<ThunkDispatch<RootState, unknown, Action>>();
+export const ActivityDetails: React.FC = () => {
+    const activity = useTypedSelector<IActivity | undefined>(({ activityDashboardReducer }) => activityDashboardReducer.selectedActivity);
+    const dispatch = useDispatch<AppDispatch>();
 
     return (
         <Card fluid>
@@ -29,7 +24,7 @@ export const ActivityDetails: React.FC<IProps> = ({ onCancel }) => {
             <Card.Content extra>
                 <Button.Group widths={2}>
                     <Button basic color='blue' content='Edit' onClick={() => { dispatch(setEditMode(true)); }} />
-                    <Button basic color='grey' content='Cancel' onClick={() => { onCancel(); }} />
+                    <Button basic color='grey' content='Cancel' onClick={() => { dispatch(selectActivity("")); }} />
                 </Button.Group>
             </Card.Content>
         </Card>

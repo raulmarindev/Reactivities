@@ -1,11 +1,12 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Button, Container, Menu } from 'semantic-ui-react';
+import { AppDispatch } from 'store';
+import { openCreateForm } from 'store/activityDashboard';
 
-interface IProps {
-    openCreateForm: () => void;
-}
+export const NavBar: React.FC = () => {
+    const dispatch = useDispatch<AppDispatch>();
 
-export const NavBar: React.FC<IProps> = ({ openCreateForm }) => {
     return (
         <Menu inverted fixed="top">
             <Container>
@@ -15,7 +16,7 @@ export const NavBar: React.FC<IProps> = ({ openCreateForm }) => {
                 </Menu.Item>
                 <Menu.Item name='Activities' />
                 <Menu.Item>
-                    <Button positive content="Create Activity" onClick={openCreateForm} />
+                    <Button positive content="Create Activity" onClick={dispatch(openCreateForm)} />
                 </Menu.Item>
             </Container>
         </Menu>);

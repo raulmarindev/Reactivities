@@ -3,30 +3,21 @@ import { ActivityDetails } from 'features/activities/dashboard/ActivityDetails';
 import { ActivityList } from 'features/activities/dashboard/ActivityList';
 import { ActivityForm } from 'features/activities/form/ActivityForm';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Grid } from 'semantic-ui-react';
-import { RootState } from 'store';
-import { ActivityDashboardState } from 'store/activityDashboard';
+import { useTypedSelector } from 'store';
 
-interface IProps {
-    createActivity: (activity: IActivity) => void;
-    deleteActivity: (id: string) => void;
-    editActivity: (activity: IActivity) => void;
-    selectActivity: (id: string) => void;
-}
-
-export const ActivityDashboard: React.FC<IProps> = ({ createActivity, deleteActivity, editActivity, selectActivity }) => {
-    const { editMode, selectedActivity } = useSelector<RootState, ActivityDashboardState>(({ activityDashboardReducer }) => activityDashboardReducer);
+export const ActivityDashboard: React.FC = () => {
+    const editMode = useTypedSelector<boolean>(({ activityDashboardReducer }) => activityDashboardReducer.editMode);
+    const selectedActivity = useTypedSelector<IActivity | undefined>(({ activityDashboardReducer }) => activityDashboardReducer.selectedActivity);
 
     return (
         <Grid>
             <Grid.Column width={10}>
-                <ActivityList deleteActivity={deleteActivity} selectActivity={selectActivity} />
+                <ActivityList />
             </Grid.Column>
             <Grid.Column width={6}>
-                {selectedActivity && !editMode && <ActivityDetails onCancel={() => { selectActivity(""); }} />}
-                {editMode && <ActivityForm key={selectedActivity?.id || 0} activity={selectedActivity!} createActivity={createActivity}
-                    editActivity={editActivity} />}
+                {selectedActivity && !editMode && <ActivityDetails />}
+                {editMode && <ActivityForm key={selectedActivity?.id || 0} />}
             </Grid.Column>
         </Grid>
     );

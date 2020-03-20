@@ -1,28 +1,21 @@
 import { IActivity } from 'app/models/IActivity';
 import React, { FormEvent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Action } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
+import { useDispatch } from 'react-redux';
 import { Button, Form, Segment } from 'semantic-ui-react';
-import { RootState } from 'store';
-import { ActivityDashboardState, setEditMode } from 'store/activityDashboard';
+import { AppDispatch, useTypedSelector } from 'store';
+import { createActivity, setEditMode, updateActivity } from 'store/activityDashboard';
 import { v4 as uuid } from 'uuid';
 
-interface IProps {
-    activity: IActivity;
-    createActivity: (activity: IActivity) => void;
-    editActivity: (activity: IActivity) => void;
-}
+export const ActivityForm: React.FC = () => {
+    const dispatch = useDispatch<AppDispatch>();
 
-export const ActivityForm: React.FC<IProps> = ({ activity: initialActivity, createActivity, editActivity }) => {
-    const { isSubmitting } = useSelector<RootState, ActivityDashboardState>(({ activityDashboardReducer }) => activityDashboardReducer);
-    const dispatch = useDispatch<ThunkDispatch<RootState, unknown, Action>>();
+    const isSubmitting = useTypedSelector<boolean>(({ activityDashboardReducer }) => activityDashboardReducer.isSubmitting);
+    const selectedActivity = useTypedSelector<IActivity | undefined>(({ activityDashboardReducer }) => activityDashboardReducer.selectedActivity);
 
     const initializeForm = () => {
-        if (initialActivity) {
-            return initialActivity;
+        if (selectedActivity) {
+            return selectedActivity;
         } else {
-
             return {
                 id: "",
                 title: "",
@@ -44,14 +37,14 @@ export const ActivityForm: React.FC<IProps> = ({ activity: initialActivity, crea
     };
 
     const handleSubmit = () => {
-        if (initialActivity) {
-            editActivity(activity);
+        if (selectedActivity) {
+            dispatch(updateActivity(activity));
         }
         else {
-            createActivity({
+            dispatch(createActivity({
                 ...activity,
                 id: uuid()
-            });
+            }));
         }
     };
 
