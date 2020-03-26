@@ -1,8 +1,6 @@
 import {
     Box,
     Button,
-    Card,
-    CardContent,
     CircularProgress,
     Divider,
     List,
@@ -16,7 +14,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { AppDispatch, useTypedSelector } from 'store';
-import { ActivityDashboardState, getActivitiesByDate, selectActivity } from 'store/activityDashboard';
+import { ActivityDashboardState, getActivitiesByDate } from 'store/activityDashboard';
 import { deleteActivity } from 'store/activityDashboard';
 
 const useStyles = makeStyles(theme => ({

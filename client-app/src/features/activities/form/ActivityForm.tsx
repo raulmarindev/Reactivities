@@ -9,7 +9,6 @@ import {
     } from 'material';
 import React, { FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { AppDispatch, useTypedSelector } from 'store';
 import { createActivity, setEditMode, updateActivity } from 'store/activityDashboard';
 import { v4 as uuid } from 'uuid';
