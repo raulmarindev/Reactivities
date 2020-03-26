@@ -29,4 +29,4 @@ export const store = configureStore({
     ] as const // prevent this from becoming just `Array<Middleware>`
 });
 
-export type AppDispatch = ThunkDispatch<RootState, unknown, Action>;
+export type AppDispatch<R = unknown> = ThunkDispatch<RootState, R, Action>;

@@ -1,16 +1,31 @@
+import {
+    Backdrop,
+    CircularProgress,
+    makeStyles,
+    Typography
+    } from 'material';
 import React from 'react';
-import { Dimmer, Loader } from 'semantic-ui-react';
 
 interface IProps {
     content?: string;
     inverted?: boolean;
 }
 
+const useStyles = makeStyles({
+    backdrop: {
+        backgroundColor: "white",
+        flexDirection: "column"
+    },
+});
+
 export const LoadingComponent: React.FC<IProps> = ({ content, inverted }) => {
+    const classes = useStyles();
+
     return (
-        <Dimmer active inverted={inverted}>
-            <Loader content={content} />
-        </Dimmer>
+        <Backdrop open={true} className={classes.backdrop}>
+            <CircularProgress color="inherit" />
+            <Typography component="div">{content}</Typography>
+        </Backdrop>
     );
 };
 

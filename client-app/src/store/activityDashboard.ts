@@ -1,5 +1,6 @@
 import agent from 'app/api/agent';
 import { IActivity } from 'app/models/IActivity';
+import { RootState } from 'store';
 import { createAction, createReducer, Dispatch, } from '@reduxjs/toolkit';
 
 // Types
@@ -35,6 +36,11 @@ const deleteActivityStart = createAction('DELETE_ACTIVITY_START', (activityId: s
 const receiveActivities = createAction<IActivity[]>('RECEIVE_ACTIVITIES');
 const requestActivities = createAction('REQUEST_ACTIVITIES');
 const requestActivitiesError = createAction('REQUEST_ACTIVITIES_ERROR');
+
+const receiveActivityById = createAction<IActivity>('RECEIVE_ACTIVITY_BY_ID');
+const requestActivityByIdNotFound = createAction('REQUEST_ACTIVITY_BY_ID_NOT_FOUND');
+const requestActivityById = createAction('REQUEST_ACTIVITY_BY_ID', (activityId: string) => ({ payload: { activityId } }));
+const requestActivityByIdError = createAction('REQUEST_ACTIVITY_BY_ID_ERROR');
 
 export const setEditMode = createAction('SET_EDIT_MODE', (isEditMode: boolean) => ({ payload: { isEditMode } }));
 export const openCreateForm = createAction('OPEN_CREATE_FORM');
@@ -83,6 +89,11 @@ export const reducer = createReducer(initialState, builder =>
         .addCase(requestActivities, state => ({ ...state, isFetching: true }))
         .addCase(requestActivitiesError, state => ({ ...state, isFetching: false }))
 
+        .addCase(receiveActivityById, (state, { payload }) => ({ ...state, isFetching: false, selectedActivity: payload }))
+        .addCase(requestActivityById, state => ({ ...state, isFetching: true }))
+        .addCase(requestActivityByIdError, state => ({ ...state, isFetching: false }))
+        .addCase(requestActivityByIdNotFound, state => ({ ...state, isFetching: false }))
+
         .addCase(selectActivity, (state, { payload }) => ({ ...state, selectedActivity: state.activities.find(a => a.id === payload.activityId) }))
 );
 
@@ -103,6 +114,30 @@ export const fetchActivities = () => async (dispatch: Dispatch) => {
         dispatch(requestActivitiesError());
     }
 };
+
+export const fetchActivityById = (activityId: string) => async (dispatch: Dispatch, getState: () => RootState) => {
+    // First dispatch: the app state is updated to inform
+    // that the API call is starting.
+    dispatch(requestActivityById(activityId));
+
+    // The function called by the thunk middleware can return a value,
+    // that is passed on as the return value of the dispatch method.
+    try {
+        let activity = getState().activityDashboardReducer.activities.find(a => a.id === activityId);
+        if (!activity) {
+            activity = await agent.Activities.details(activityId);
+        }
+
+        if (activity)
+            dispatch(receiveActivityById(formatActivity(activity)));
+        else
+            dispatch(requestActivityByIdNotFound());
+    } catch (error) {
+        console.log(error);
+        dispatch(requestActivityByIdError());
+    }
+};
+
 
 export const createActivity = (activity: IActivity) => async (dispatch: Dispatch) => {
     dispatch(createActivityStart());
@@ -140,12 +175,20 @@ export const deleteActivity = (activityId: string) => async (dispatch: Dispatch)
     }
 };
 
+const formatActivity = (activity: IActivity) => {
+    if (activity && activity.date) {
+        return {
+            ...activity,
+            date: activity.date.split('.')[0]
+        };
+    }
+
+    return activity;
+};
+
 const formatActivities = (activities: IActivity[]): IActivity[] => {
     return activities.map(a => {
-        return {
-            ...a,
-            date: a.date.split('.')[0]
-        };
+        return formatActivity(a);
     });
 };;
 

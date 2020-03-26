@@ -2,8 +2,8 @@ import { IActivity } from 'app/models/IActivity';
 import { ActivityDetails } from 'features/activities/dashboard/ActivityDetails';
 import { ActivityList } from 'features/activities/dashboard/ActivityList';
 import { ActivityForm } from 'features/activities/form/ActivityForm';
+import { Grid } from 'material';
 import React from 'react';
-import { Grid } from 'semantic-ui-react';
 import { useTypedSelector } from 'store';
 
 export const ActivityDashboard: React.FC = () => {
@@ -11,14 +11,14 @@ export const ActivityDashboard: React.FC = () => {
     const selectedActivity = useTypedSelector<IActivity | undefined>(({ activityDashboardReducer }) => activityDashboardReducer.selectedActivity);
 
     return (
-        <Grid>
-            <Grid.Column width={10}>
+        <Grid container spacing={3}>
+            <Grid item xs={8}>
                 <ActivityList />
-            </Grid.Column>
-            <Grid.Column width={6}>
+            </Grid>
+            <Grid item xs={4}>
                 {selectedActivity && !editMode && <ActivityDetails />}
                 {editMode && <ActivityForm key={selectedActivity?.id || 0} />}
-            </Grid.Column>
+            </Grid>
         </Grid>
     );
 };
