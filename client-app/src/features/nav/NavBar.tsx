@@ -149,19 +149,19 @@ export const NavBar: React.FC = ({ children }) => {
                 </div>
                 <Divider />
                 <List>
-                    <ListItem button exact component={NavLink} to="/">
+                    <ListItem button component={NavLink} to="/" activeClassName="Mui-selected" exact>
                         <ListItemIcon title="Home"><HomeIcon /></ListItemIcon>
                         <ListItemText primary="Home" />
                     </ListItem>
                 </List>
                 <List>
-                    <ListItem button exact component={NavLink} to="/activities">
+                    <ListItem button component={NavLink} to="/activities" activeClassName="Mui-selected" exact>
                         <ListItemIcon title="Activity List"><ListIcon /></ListItemIcon>
                         <ListItemText primary="Activities List" />
                     </ListItem>
                 </List>
                 <List>
-                    <ListItem button exact component={NavLink} to="/createActivity">
+                    <ListItem button component={NavLink} to="/createActivity" activeClassName="Mui-selected" exact>
                         <ListItemIcon title="Create Activity"><AddIcon /></ListItemIcon>
                         <ListItemText primary="Create Activity" />
                     </ListItem>
