@@ -30,4 +30,7 @@ export { default as MenuIcon } from '@material-ui/icons/Menu';
 export { default as TextField } from '@material-ui/core/TextField';
 export { default as Toolbar } from "@material-ui/core/Toolbar";
 export { default as Typography } from "@material-ui/core/Typography";
-export { makeStyles, useTheme } from '@material-ui/core/styles';
+export { default as makeStyles } from '@material-ui/core/styles/makeStyles';
+export { default as useTheme } from '@material-ui/core/styles/useTheme';
+export { default as createMuiTheme } from '@material-ui/core/styles/createMuiTheme';
+export { MuiThemeProvider } from '@material-ui/core/styles';

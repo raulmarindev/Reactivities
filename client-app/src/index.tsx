@@ -1,5 +1,7 @@
 import App from 'app/layout/App';
 import 'app/layout/styles.css';
+import { appTheme } from 'app/themes';
+import { MuiThemeProvider } from 'material';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -8,11 +10,13 @@ import * as serviceWorker from 'serviceWorker';
 import { store } from 'store';
 
 ReactDOM.render(
-    <Provider store={store} >
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
-    </Provider>,
+    <MuiThemeProvider theme={appTheme}>
+        <Provider store={store} >
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </Provider>
+    </MuiThemeProvider>,
     document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
