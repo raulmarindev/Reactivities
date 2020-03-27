@@ -1,17 +1,21 @@
 import 'app/layout/App.css';
 import { LoadingComponent } from 'app/layout/LoadingComponent';
-import { ActivityDashboard } from 'features/activities/dashboard/ActivityDashboard';
-import { ActivityDetails } from 'features/activities/dashboard/ActivityDetails';
-import { ActivityForm } from 'features/activities/form/ActivityForm';
-import { HomePage } from 'features/activities/home/HomePage';
 import { NavBar } from 'features/nav/NavBar';
+import { Container, makeStyles } from 'material';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Route } from 'react-router-dom';
+import { RenderRoute, Routes } from 'routes';
 import { AppDispatch, useTypedSelector } from 'store';
 import { fetchActivities, } from 'store/activityDashboard';
 
+const useStyles = makeStyles(theme => ({
+  root: {
+  },
+}));
+
 const App: React.FC = () => {
+  const classes = useStyles();
+
   const loading = useTypedSelector<boolean>(({ activityDashboardReducer }) => activityDashboardReducer.isFetching);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -25,10 +29,11 @@ const App: React.FC = () => {
   return (
     <>
       <NavBar>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/activities" component={ActivityDashboard} />
-        <Route exact path="/activities/:id" component={ActivityDetails} />
-        <Route exact path="/createActivity" component={ActivityForm} />
+        <Container className={classes.root}>
+          {
+            Array.from(Routes).map(r => <RenderRoute key={r[0]} {...r[1]} />)
+          }
+        </Container>
       </NavBar>
     </>
   );
