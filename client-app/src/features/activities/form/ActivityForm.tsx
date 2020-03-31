@@ -81,21 +81,30 @@ export const ActivityForm: React.FC<RouteComponentProps<ActivityFormParams>> = (
         setActivity({ ...activity, [name]: value });
     };
 
+    const goToActivityDetails = (activityId: string) => {
+        history.push(activityDetailsRoute.path.replace(':id', activityId));
+    };
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         if (match.params.id && selectedActivity) {
-            dispatch(updateActivity(activity));
+            dispatch(updateActivity(activity)).then(() => goToActivityDetails(match.params.id!));
         }
         else {
+            const newActivityId = uuid();
             dispatch(createActivity({
                 ...activity,
-                id: uuid()
-            }));
+                id: newActivityId
+            })).then(() => {
+                console.log(`activity id: ${activity.id}`);
+                goToActivityDetails(newActivityId);
+            });
         }
     };
 
     const activitiesRoute = Routes.get(routesKeys.ActivitiesList)!;
+    const activityDetailsRoute = Routes.get(routesKeys.ActivityDetails)!;
 
     return (
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -114,7 +123,12 @@ export const ActivityForm: React.FC<RouteComponentProps<ActivityFormParams>> = (
                             <CircularProgress size={24} /> : // Size 14 works pretty well
                             <Typography>Submit</Typography>}
                     </Button>
-                    <Button variant="contained" size="small" color="default" onClick={() => { history.push(activitiesRoute.path); }}><Typography>Cancel</Typography></Button>
+                    <Button variant="contained" size="small" color="default" onClick={() => {
+                        if (match.params.id)
+                            goToActivityDetails(match.params.id);
+                        else
+                            history.push(activitiesRoute.path);
+                    }}><Typography>Cancel</Typography></Button>
                 </CardActions>
             </Card>
         </form>

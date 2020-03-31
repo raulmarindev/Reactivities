@@ -6,7 +6,6 @@ import { createAction, createReducer, Dispatch, } from '@reduxjs/toolkit';
 // Types
 export interface ActivityDashboardState {
     activities: IActivity[];
-    editMode: boolean;
     isFetching: boolean;
     isSubmitting: boolean;
     selectedActivity: IActivity | undefined;
@@ -14,7 +13,6 @@ export interface ActivityDashboardState {
 
 const initialState: ActivityDashboardState = {
     activities: [],
-    editMode: false,
     isFetching: false,
     isSubmitting: false,
     selectedActivity: undefined
@@ -42,20 +40,17 @@ const requestActivityByIdNotFound = createAction('REQUEST_ACTIVITY_BY_ID_NOT_FOU
 const requestActivityById = createAction('REQUEST_ACTIVITY_BY_ID', (activityId: string) => ({ payload: { activityId } }));
 const requestActivityByIdError = createAction('REQUEST_ACTIVITY_BY_ID_ERROR');
 
-export const setEditMode = createAction('SET_EDIT_MODE', (isEditMode: boolean) => ({ payload: { isEditMode } }));
 export const openCreateForm = createAction('OPEN_CREATE_FORM');
 export const selectActivity = createAction('SELECT_ACTIVITY', (activityId: string) => ({ payload: { activityId } }));
 
 // Reducer
 export const reducer = createReducer(initialState, builder =>
     builder
-        .addCase(setEditMode, (state, { payload }) => ({ ...state, editMode: payload.isEditMode }))
         .addCase(createActivityEnd, (state, { payload }) => (
             {
                 ...state,
                 isSubmitting: false,
                 selectedActivity: payload.activity,
-                editMode: false,
                 activities: [...state.activities, payload.activity]
             }))
         .addCase(createActivityError, state => ({ ...state, isSubmitting: false }))
@@ -66,7 +61,6 @@ export const reducer = createReducer(initialState, builder =>
                 ...state,
                 isSubmitting: false,
                 selectedActivity: payload.activity,
-                editMode: false,
                 activities: [...state.activities.filter(a => a.id !== payload.activity.id), payload.activity]
             }))
         .addCase(updateActivityError, state => ({ ...state, isSubmitting: false }))
@@ -78,12 +72,11 @@ export const reducer = createReducer(initialState, builder =>
                 isSubmitting: false,
                 activities: [...state.activities.filter(a => a.id !== payload.activityId)],
                 selectedActivity: undefined,
-                editMode: false
             }))
-        .addCase(deleteActivityError, state => ({ ...state, isSubmitting: false, selectedActivity: undefined, editMode: false }))
+        .addCase(deleteActivityError, state => ({ ...state, isSubmitting: false, selectedActivity: undefined }))
         .addCase(deleteActivityStart, (state, { payload }) => ({ ...state, isSubmitting: true, selectedActivity: state.activities.find(a => a.id === payload.activityId) }))
 
-        .addCase(openCreateForm, state => ({ ...state, selectedActivity: undefined, editMode: true }))
+        .addCase(openCreateForm, state => ({ ...state, selectedActivity: undefined }))
 
         .addCase(receiveActivities, (state, { payload }) => ({ ...state, isFetching: false, activities: payload }))
         .addCase(requestActivities, state => ({ ...state, isFetching: true }))
