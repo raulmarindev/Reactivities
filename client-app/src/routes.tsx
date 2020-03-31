@@ -3,13 +3,14 @@ import { ActivityDetails } from 'features/activities/dashboard/ActivityDetails';
 import { ActivityForm } from 'features/activities/form/ActivityForm';
 import { HomePage } from 'features/activities/home/HomePage';
 import React, { FunctionComponent } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, RouteComponentProps } from 'react-router-dom';
 
 interface IRoute {
     path: string;
     exact: boolean;
-    component: FunctionComponent<any>;
+    component?: FunctionComponent<any>;
     routes?: IRoute[];
+    render?: (props: RouteComponentProps<any>) => React.ReactNode;
 }
 
 export enum routesKeys {
@@ -17,7 +18,8 @@ export enum routesKeys {
     ActivitiesList = 'ActivitiesList',
     ActivityDetails = 'ActivityDetails',
     CreateActivityForm = 'CreateActivityForm',
-    EditActivityForm = "EditActivityForm"
+    EditActivityForm = "EditActivityForm",
+    InternalArea = "InternalArea"
 }
 
 export const Routes = new Map<routesKeys, IRoute>([
@@ -26,6 +28,7 @@ export const Routes = new Map<routesKeys, IRoute>([
     [routesKeys.ActivityDetails, { path: '/activities/:id', exact: true, component: ActivityDetails, }],
     [routesKeys.CreateActivityForm, { path: '/createActivity', exact: true, component: ActivityForm, }],
     [routesKeys.EditActivityForm, { path: '/activities/edit/:id', exact: true, component: ActivityForm, }],
+    [routesKeys.InternalArea, { path: '/(.+)', exact: true }],
 ]);
 
 /**
