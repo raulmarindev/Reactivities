@@ -1,4 +1,3 @@
-import 'app/layout/App.css';
 import { NavBar } from 'features/nav/NavBar';
 import { Container, makeStyles } from 'material';
 import React from 'react';
