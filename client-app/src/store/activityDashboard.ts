@@ -189,5 +189,20 @@ const formatActivities = (activities: IActivity[]): IActivity[] => {
 export const getActivitiesByDate = (state: ActivityDashboardState) => {
     const activities = [...state.activities];
 
-    return activities.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+    activities.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+
+    return activities.reduce((accumulator, activity) => {
+        const date = activity.date.split('T')[0];
+        const existingDateGroup = accumulator.get(date);
+
+        if (existingDateGroup) {
+            existingDateGroup.push(activity);
+        }
+        else {
+            accumulator.set(date, [activity]);
+        }
+
+        return accumulator;
+
+    }, new Map<string, IActivity[]>());
 };
